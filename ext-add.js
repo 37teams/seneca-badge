@@ -13,6 +13,10 @@ module.exports = pattern => reply => next => args => {
     return next(args)
   }
 
+  if (!badge$) {
+    return reply(null, { ok: false, why: 'unauthorized' })
+  }
+
   if (policy$.attrs) {
     allow = policy$.attrs.every(isGranted(badge$.attrs))
   }

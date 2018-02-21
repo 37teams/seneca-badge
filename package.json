@@ -1,6 +1,6 @@
 {
   "name": "seneca-badge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Permissions for seneca",
   "main": "index.js",
   "scripts": {
