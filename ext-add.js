@@ -7,7 +7,7 @@ const isGranted = grants => {
 module.exports = pattern => reply => next => args => {
   const { policy$ } = pattern
   const { badge$ } = args
-  let allowed = false
+  let allow = false
 
   if (!policy$) {
     return next(args)

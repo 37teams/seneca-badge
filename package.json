@@ -4,7 +4,7 @@
   "description": "Permissions for seneca",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lab test/*.test.js -r console -v"
   },
   "author": "Michael Lindenau",
   "license": "ISC",
@@ -12,5 +12,9 @@
     "jaeger-client": "^3.8.0",
     "lodash": "^4.17.5",
     "opentracing": "^0.14.1"
+  },
+  "devDependencies": {
+    "code": "^5.2.0",
+    "lab": "^15.2.2"
   }
 }
