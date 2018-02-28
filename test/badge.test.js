@@ -5,91 +5,50 @@ const lab = (exports.lab = Lab.script())
 const { beforeEach, describe, it } = lab
 const { expect, fail } = Code
 
-const badgeActionExt = require('../ext-add')
+const Badge = require('../badge')
 
 describe('badge', function() {
   it('Passes if no policy exists', async function() {
-    const done = () => expect('was hit').to.exist()
-    const reply = () => {}
-    const pattern = {}
-    const argsMOck = {}
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
+    const policy = null
+    const badge = {}
+    expect(Badge(policy, badge)).to.be.true()
+  })
+
+  it('Fails if policy exists but no badge', async function() {
+    const policy = { exists: true }
+    const badge = null
+
+    expect(Badge(policy, badge)).to.be.false()
+    expect(Badge(policy, {})).to.be.false()
   })
 
   it('Passes if roles policy is granted', async function() {
-    const done = args => {
-      expect(args).to.exist()
-    }
+    const policy = { roles: ['pass'] }
+    const badge = { roles: ['pass'] }
+    expect(Badge(policy, badge)).to.be.true()
+  })
 
-    const reply = () => {}
-    const pattern = { policy$: { roles: ['pass'] } }
-    const argsMOck = { badge$: { roles: ['pass'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
+  it('Passes if object roles policy is granted', async function() {
+    const policy = { roles: [{ id: 'pass' }] }
+    const badge = { roles: [{ id: 'pass' }] }
+    expect(Badge(policy, badge)).to.be.true()
   })
 
   it('Passes if attrs policy is granted', async function() {
-    const done = args => {
-      expect(args).to.exist()
-    }
-
-    const reply = () => {}
-    const pattern = { policy$: { attrs: ['pass'] } }
-    const argsMOck = { badge$: { attrs: ['pass'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
+    const policy = { attrs: ['pass'] }
+    const badge = { attrs: ['pass'] }
+    expect(Badge(policy, badge)).to.be.true()
   })
 
-  it('Passes if policies are granted', async function() {
-    const done = args => {
-      expect(args).to.exist()
-    }
+  it('Passes if resource policy is granted', async function() {
+    let policy = { resources: [{ id: 'test', role: 'admin' }] }
+    let badge = { resources: [{ id: 'test', role: 'admin' }] }
+    expect(Badge(policy, badge)).to.be.true()
 
-    const reply = () => {}
-    const pattern = { policy$: { roles: ['pass'], attrs: ['pass'] } }
-    const argsMOck = { badge$: { roles: ['pass'], attrs: ['pass'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
-  })
-
-  it('Fails auth if no badge but policy exists', async function() {
-    const done = () => {}
-    const reply = (err, args) => {
-      expect(args.ok).to.be.false()
-      expect(args.why).to.equal('unauthorized')
+    policy = { resources: [{ id: 'pass', role: 'pass', attrs: ['pass'] }] }
+    badge = {
+      resources: [{ id: 'pass', role: 'pass', attrs: ['pass', 'extra'] }]
     }
-    const pattern = { policy$: { exists: true } }
-    const argsMOck = {}
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
-  })
-
-  it('Fails auth if role policy doesnt resolve', async function() {
-    const done = () => {}
-    const reply = (err, args) => {
-      expect(args.ok).to.be.false()
-      expect(args.why).to.equal('unauthorized')
-    }
-    const pattern = { policy$: { roles: ['fail'] } }
-    const argsMOck = { badge$: { roles: ['miss'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
-  })
-
-  it('Fails auth if attrs policy doesnt resolve', async function() {
-    const done = () => {}
-    const reply = (err, args) => {
-      expect(args.ok).to.be.false()
-      expect(args.why).to.equal('unauthorized')
-    }
-    const pattern = { policy$: { attrs: ['fail'] } }
-    const argsMOck = { badge$: { attrs: ['miss'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
-  })
-
-  it('Fails auth if role policy doesnt resolve', async function() {
-    const done = () => {}
-    const reply = (err, args) => {
-      expect(args.ok).to.be.false()
-      expect(args.why).to.equal('unauthorized')
-    }
-    const pattern = { policy$: { roles: ['miss'], attrs: ['pass'] } }
-    const argsMOck = { badge$: { roles: ['pass'], attrs: ['pass'] } }
-    badgeActionExt(pattern)(reply)(done)(argsMOck)
+    expect(Badge(policy, badge)).to.be.true()
   })
 })

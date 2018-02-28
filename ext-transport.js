@@ -26,9 +26,14 @@ module.exports = function BadgeTransport(options) {
 
     if (!options.authorize) return
 
-    const isAuthorized = options.autorization
-      ? options.autorization()
-      : Badge(policy, badge)
+    let isAuthorized = false
+
+    if (options.autorization) {
+      isAuthorized = options.autorization(policy, badge, msg)
+    } else {
+      // TODO: think through allowing policy to reference msg values
+      isAuthorized = Badge(policy, badge)
+    }
 
     if (!isAuthorized) {
       return {
