@@ -1,10 +1,17 @@
 const { isMatch, isEmpty } = require('lodash')
 
-const isGranted = grant => requirement => {
+const isGranted = requirement => grant => {
   return isMatch(grant, requirement)
 }
 
-module.exports = function(policy, badge) {
+const interpolate = (defs, msg) => {
+  return defs.map(def => {
+    def.id = msg[def.id]
+    return def
+  })
+}
+
+module.exports = function(policy, badge, msg) {
   let allow = false
 
   if (!policy || isEmpty(policy)) return true
@@ -18,8 +25,12 @@ module.exports = function(policy, badge) {
     allow = isGranted(badge.roles)(policy.roles)
   }
 
+  if (allow) {
+    return allow
+  }
+
   if (policy.resources) {
-    allow = isGranted(badge.resources)(policy.resources)
+    allow = isGranted(interpolate(policy.resources, msg))(badge.resources)
   }
 
   return allow

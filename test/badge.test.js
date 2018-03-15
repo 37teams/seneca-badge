@@ -41,14 +41,17 @@ describe('badge', function() {
   })
 
   it('Passes if resource policy is granted', async function() {
-    let policy = { resources: [{ id: 'test', role: 'admin' }] }
-    let badge = { resources: [{ id: 'test', role: 'admin' }] }
-    expect(Badge(policy, badge)).to.be.true()
+    const msg = { id: 'pass' }
+    let badge = { resources: [{ id: 'pass', role: 'admin' }] }
+    let policy = { resources: [{ id: 'id', role: 'admin' }] }
+    expect(Badge(policy, badge, msg)).to.be.true()
+  })
 
-    policy = { resources: [{ id: 'pass', role: 'pass', attrs: ['pass'] }] }
-    badge = {
-      resources: [{ id: 'pass', role: 'pass', attrs: ['pass', 'extra'] }]
-    }
-    expect(Badge(policy, badge)).to.be.true()
+  it('Fails if resource policy is rejected', async function() {
+    const msg = { id: 'fail' }
+    let badge = { resources: [{ id: 'test', role: 'admin' }] }
+    let policy = { resources: [{ id: 'id', role: 'admin' }] }
+
+    expect(Badge(policy, badge, msg)).to.be.false()
   })
 })

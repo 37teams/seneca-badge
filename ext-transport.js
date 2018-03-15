@@ -29,7 +29,7 @@ module.exports = function BadgeTransport(options) {
       isAuthorized = options.authorization(policy, badge, msg)
     } else {
       // TODO: think through allowing policy to reference msg values
-      isAuthorized = Badge(policy, badge)
+      isAuthorized = Badge(policy, badge, msg)
     }
 
     if (!isAuthorized) {
