@@ -7,6 +7,7 @@
     "test": "lab test/*.test.js -r console -v"
   },
   "author": "Michael Lindenau",
+  "repository": "git@github.com:MikeLindenau/seneca-badge.git",
   "license": "ISC",
   "dependencies": {
     "jaeger-client": "^3.8.0",
