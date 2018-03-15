@@ -1,6 +1,6 @@
 # Seneca Badge
 
-An authorization plugin for seneca. An action/command should be responsible for knowning the the requester/actor is allowed do the thing it can do. With badge when you authenticate a requester they get a badge which travels with them throughout the service mesh. A seneca action can describe an authorization policy within its pattern. If the policy is met, then the action will run. This achieves keeping the authorization code out of the action yet still requiring the action to dictate it's policy.
+An authorization plugin for seneca. An action/command should be responsible for knowing the the requester/actor is allowed do the thing it can do. With badge when you authenticate a requester they get a badge which travels with them throughout the service mesh. A seneca action can describe an authorization policy within its pattern. If the policy is met, then the action will run. This achieves keeping the authorization code out of the action yet still requiring the action to dictate it's policy.
 
 # Example
 
