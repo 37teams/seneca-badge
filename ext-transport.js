@@ -4,7 +4,6 @@ const { internalAction, getPattern, getPlugin } = require('./utils')
 
 module.exports = function BadgeTransport(options) {
   options = options || {}
-  options.authorize = options.authorize || true
   const seneca = this
 
   seneca.inward(badgeInward)
@@ -24,12 +23,10 @@ module.exports = function BadgeTransport(options) {
     ctx.seneca.fixedargs.badge$ = badge
     msg.badge$ = badge
 
-    if (!options.authorize) return
-
     let isAuthorized = false
 
-    if (options.autorization) {
-      isAuthorized = options.autorization(policy, badge, msg)
+    if (options.authorization) {
+      isAuthorized = options.authorization(policy, badge, msg)
     } else {
       // TODO: think through allowing policy to reference msg values
       isAuthorized = Badge(policy, badge)
