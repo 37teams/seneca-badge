@@ -20,8 +20,10 @@ module.exports = function BadgeTransport(options) {
     const policy = ctx.actdef.raw.policy$ || null
 
     // Apply badge to all places
-    ctx.seneca.fixedargs.badge$ = badge
-    msg.badge$ = badge
+    if (badge) {
+      ctx.seneca.fixedargs.badge$ = badge
+      msg.badge$ = badge
+    }
 
     let isAuthorized = false
 
@@ -48,7 +50,9 @@ module.exports = function BadgeTransport(options) {
     if (internalAction(msg)) return
 
     const badge = ctx.seneca.fixedargs.badge$ || msg.badge$ || null
-    ctx.seneca.fixedargs.badge$ = badge
-    msg.badge$ = badge
+    if (badge) {
+      ctx.seneca.fixedargs.badge$ = badge
+      msg.badge$ = badge
+    }
   }
 }
