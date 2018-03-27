@@ -1,5 +1,5 @@
 module.exports = {
-  Badge: require('./ext-transport'),
+  badge: require('./badge'),
   transport: require('./ext-transport'),
   wrapper: require('./ext-add')
 }

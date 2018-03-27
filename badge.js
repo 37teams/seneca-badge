@@ -1,37 +1,43 @@
 const { isMatch, isEmpty } = require('lodash')
 
-const isGranted = requirement => grant => {
-  return isMatch(grant, requirement)
+const interpolate = (def, msg) => {
+  def.id = msg[def.id]
+  return def
 }
 
-const interpolate = (defs, msg) => {
-  return defs.map(def => {
-    def.id = msg[def.id]
-    return def
-  })
-}
-
-module.exports = function(policy, badge, msg) {
+const tryPolicy = (policy, badge) => {
   let allow = false
 
-  if (!policy || isEmpty(policy)) return true
-  if (!badge || isEmpty(badge)) return false
-
   if (policy.attrs) {
-    allow = isGranted(badge.attrs)(policy.attrs)
+    allow = isMatch(policy.attrs, badge.attrs)
   }
 
   if (policy.roles) {
-    allow = isGranted(badge.roles)(policy.roles)
-  }
+    const hasRoles =
+      typeof badge.roles === 'string' ? [badge.roles] : badge.roles
+    const policyRoles =
+      typeof policy.roles === 'string' ? [policy.roles] : policy.roles
 
-  if (allow) {
-    return allow
-  }
-
-  if (policy.resources) {
-    allow = isGranted(interpolate(policy.resources, msg))(badge.resources)
+    allow = hasRoles.some(r => isMatch(policyRoles, [r]))
   }
 
   return allow
+}
+
+const tryResourcePolicy = (policy, resourceGrants) => {
+  const resourceGrant = resourceGrants.find(grant => policy.id === grant.id)
+  if (!resourceGrant) return false
+
+  return tryPolicy(policy, resourceGrant)
+}
+
+module.exports = function(policy, badge, msg) {
+  if (!policy || isEmpty(policy)) return true
+  if (!badge || isEmpty(badge)) return false
+
+  if (policy.resource) {
+    return tryResourcePolicy(interpolate(policy.resource, msg), badge.resources)
+  }
+
+  return tryPolicy(policy, badge)
 }

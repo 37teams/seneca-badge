@@ -21,3 +21,5 @@ data
 
 test/mine.options.js
 test/data
+
+.vscode

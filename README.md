@@ -51,10 +51,11 @@ module.exports = function example(options) {
       role: 'example',
       cmd: 'get',
       policy$: {
-        resources:[{
+        // Unlike badge, in policies, resources is a single object not array
+        resources:{
           id: 'id',
           roles: ['owner']
-        }]
+        }
         roles: ['admin']
       }
     },
