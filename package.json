@@ -10,9 +10,7 @@
   "repository": "git@github.com:MikeLindenau/seneca-badge.git",
   "license": "ISC",
   "dependencies": {
-    "jaeger-client": "^3.8.0",
-    "lodash": "^4.17.5",
-    "opentracing": "^0.14.1"
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
     "code": "^5.2.0",
