@@ -1,4 +1,5 @@
 const assert = require('assert')
+const _ = require('lodash')
 const Badge = require('./badge')
 const { internalAction, getPattern, getPlugin } = require('./utils')
 
@@ -16,8 +17,8 @@ module.exports = function BadgeTransport(options) {
     const meta = data.meta
 
     // Get badge info from all places
-    const badge = ctx.seneca.fixedargs.badge$ || msg.badge$ || null
-    const policy = ctx.actdef.raw.policy$ || null
+    const badge = _.cloneDeep(ctx.seneca.fixedargs.badge$ || msg.badge$ || null)
+    const policy = _.cloneDeep(ctx.actdef.raw.policy$ || null)
 
     // Apply badge to all places
     if (badge) {
